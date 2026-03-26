@@ -1,24 +1,25 @@
-import express from 'express';
-import { celebrate } from 'celebrate';
-
+import { Router } from 'express';
 import {
-  getAllNotes,
-  getNoteById,
   createNote,
   deleteNote,
   updateNote,
+  getAllNotes,
+  getNoteById,
 } from '../controllers/notesController.js';
-
+import { celebrate } from 'celebrate';
 import {
-  getAllNotesSchema,
   noteIdSchema,
   createNoteSchema,
+  getAllNotesSchema,
   updateNoteSchema,
 } from '../validations/notesValidation.js';
+import { authenticate } from '../middleware/authenticate.js';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
+router.use("/notes", authenticate);
+
+router.get('/notes',celebrate(getAllNotesSchema), getAllNotes);
 
 router.get('/notes/:noteId', celebrate(noteIdSchema), getNoteById);
 
